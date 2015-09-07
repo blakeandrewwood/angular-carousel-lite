@@ -1,37 +1,17 @@
 /**
  * Responsive carousel fit for asynchronous data
- * @version v1.0.0 - 2015-09-08
+ * @version v0.0.2 - 2015-09-08
  * @link https://github.com/blakeandrewwood/angular-carousel-lite#readme
  * @author Blake Wood
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 /* jshint node: true */
 
-/*
-* CarouselLite
-* Version: 0.0.2
-* Author: Blake Wood	
-* Website: blakewood.co
-* Docs: http://github.com/blakeandrewwood/angular-carousel-lite 
-* Repo: http://github.com/blakeandrewwood/angular-carousel-lite 
-* Issues: http://github.com/blakeandrewwood/angular-carousel-lite/issues 
-* Dependencies: Angular, jQuery
-*/
 'use strict';
 angular.module('angularCarouselLite', []);
 
 /* jshint node: true */
 
-/*
-* CarouselLite
-* Version: 0.0.2
-* Author: Blake Wood	
-* Website: blakewood.co
-* Docs: http://github.com/blakeandrewwood/angular-carousel-lite 
-* Repo: http://github.com/blakeandrewwood/angular-carousel-lite 
-* Issues: http://github.com/blakeandrewwood/angular-carousel-lite/issues 
-* Dependencies: Angular, jQuery
-*/
 'use strict';
 angular.module('angularCarouselLite')
 .directive('carouselLite', ['$timeout', function ($timeout) {
@@ -99,8 +79,6 @@ angular.module('angularCarouselLite')
 				// Carousel styles
 				carousel.css({
 					'position': 'relative',
-					'width': '90%',
-					'height': '200px',
 					'background-color': '#fff',
 					'cursor': 'pointer',
 					'overflow-x': 'hidden',
