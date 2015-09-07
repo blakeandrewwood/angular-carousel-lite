@@ -1,0 +1,32 @@
+{
+  "name": "angular-carousel-lite",
+  "version": "1.0.0",
+  "authors": [
+    "Blake <blakeandrewwood@gmail.com>"
+  ],
+  "description": "Responsive carousel fit for asynchronous data",
+  "main": "angular-carousel-lite.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "carousel",
+    "asynchronous",
+    "responsive",
+    "slideshow"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/blakeandrewwood/angular-carousel-lite",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.5",
+    "jquery": "~2.1.4"
+  }
+}
