@@ -67,8 +67,6 @@ angular.module('angularCarouselLite')
 				// Carousel styles
 				carousel.css({
 					'position': 'relative',
-					'width': '90%',
-					'height': '200px',
 					'background-color': '#fff',
 					'cursor': 'pointer',
 					'overflow-x': 'hidden',
