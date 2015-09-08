@@ -367,11 +367,11 @@ angular.module('angularCarouselLite')
 			*/
 
 			function preScroll() {
-				setOpacityFocus();
 				broadcastPreScroll();
 			}
 			
 			function postScroll(direction) {
+				setOpacityFocus();
 				// Set this scroll position to last for next event
 				carouselData.lastScroll.x = carousel.scrollLeft();
 				broadcastPostScroll(direction);
