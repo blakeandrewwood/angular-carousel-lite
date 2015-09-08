@@ -243,6 +243,7 @@ angular.module('angularCarouselLite')
 				// Arrays
 				var offsetsPos = [];
 				var offsetsNeg = [];
+
 				// Calculate all offsets
 				$('.carousel-image').each(function() {
 					var self = $(this);
@@ -253,17 +254,28 @@ angular.module('angularCarouselLite')
 						offsetsNeg.push(offsetCenter);
 					}
 				});
+
 				// Find nearest position
 				var minPos = Array.absMin(offsetsPos);
 				var minNeg = Array.absMin(offsetsNeg);
 				var nearest = (minPos > minNeg) ? -minNeg : minPos;
 				var direction = (minPos > minNeg) ? 'prev' : 'next';
-				// Increase or decrease position
-				if(direction == 'next') {
-					carouselData.position++;
-				} else {
-					carouselData.position--;
+
+				// Determine direction
+				if(minPos > minNeg && (center - nearest) > 0) {
+					direction = 'none';
 				}
+				else if(minPos < minNeg && (center - nearest) < 0) {
+					direction = 'none';
+				}
+				else if(minPos > minNeg) {
+					direction = 'prev';
+					carouselData.position--;
+				} else {
+					direction = 'next';
+					carouselData.position++;
+				}
+
 				// Scroll to nearest
 				var newScrollX = carousel.scrollLeft() + nearest;
 				scrollToPoint(newScrollX, direction);
@@ -390,23 +402,6 @@ angular.module('angularCarouselLite')
 					position: carouselData.position 
 				});
 			} 
-			
-			/**
-			* Arrangment 
-			*
-			*/
-
-			/*
-			// Arrange first to last 
-			function moveFirstBeforeLast() {
-				$('.carousel-image:first').before($('.carousel-image:last'));
-			}
-			
-			// Arrange last to first 
-			function moveLastAfterFirst() {
-				$('.carousel-image:last').after($('.carousel-image:first'));
-			}
-			*/
 			
 		}
 	};
