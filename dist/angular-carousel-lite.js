@@ -262,8 +262,8 @@ angular.module('angularCarouselLite')
 				var direction = (minPos > minNeg) ? 'prev' : 'next';
 
 				// Determine direction
-				var dif = center - nearest;
-				console.log({nearest: nearest, minPos: minPos, minNeg: minNeg, difference: dif});
+				console.log({nearest: nearest, center: center});
+
 				if(minPos > minNeg) {
 					direction = 'prev';
 					carouselData.position--;
