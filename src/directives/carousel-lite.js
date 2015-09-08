@@ -31,8 +31,8 @@ angular.module('angularCarouselLite')
 			// Data
 			var carouselData = {
 						position: -1,
-						lastPosition: -1,
 						numSlides: 0,
+						lastScroll: {x: 0},
 					},
 					mouse = {
 						button: null,
@@ -137,7 +137,8 @@ angular.module('angularCarouselLite')
 					// If first append, go to it
 					if(carouselData.numSlides == 1){
 						$timeout(function() {
-								carouselData.position = 0;
+								// Force direction to be set as 'next'
+								carouselData.lastScroll.x = -9999;
 								scrollTo(0);
 						}, 800);
 					} 
@@ -197,23 +198,21 @@ angular.module('angularCarouselLite')
 			function scrollNext() {
 				if(carouselData.numSlides > 0 &&
 					carouselData.position < carouselData.numSlides - 1) {
-					carouselData.position++;
-					scrollTo(carouselData.position, 'next');
+					scrollTo(carouselData.position);
 				}
 			}
 			
 			// Scroll Prev
 			function scrollPrev() {
 				if(carouselData.position > 0 ) {
-					carouselData.position--;
-					scrollTo(carouselData.position, 'prev');
+					scrollTo(carouselData.position);
 				}
 			}
 			
 			// Scroll To
-			function scrollTo(position, direction) {
+			function scrollTo(position) {
 				var newScrollX = getSlideByPosition(carouselData.position);
-				scrollToPoint(newScrollX, direction);
+				scrollToPoint(newScrollX);
 			}
 			
 			// Scroll Drag
@@ -247,30 +246,10 @@ angular.module('angularCarouselLite')
 				var minPos = Array.absMin(offsetsPos);
 				var minNeg = Array.absMin(offsetsNeg);
 				var nearest = (minPos > minNeg) ? -minNeg : minPos;
-				var direction = (minPos > minNeg) ? 'prev' : 'next';
-
-				// Determine direction
-				var difference = center + nearest;
-				//console.log({nearest: nearest, center: center});
-
-				if(minPos > minNeg && difference < center) {
-					direction = 'noneBack';
-				}
-				else if(minPos < minNeg && difference > center) {
-					direction = 'noneForward';
-				}
-				else if(minPos > minNeg) {
-					direction = 'prev';
-					carouselData.position--;
-				}
-				else if(minPos < minNeg) {
-					direction = 'next';
-					carouselData.position++;
-				}
 
 				// Scroll to nearest
 				var newScrollX = carousel.scrollLeft() + nearest;
-				scrollToPoint(newScrollX, direction);
+				scrollToPoint(newScrollX);
 			}
 			
 			// Get position
@@ -282,11 +261,25 @@ angular.module('angularCarouselLite')
 			}
 			
 			// Scroll to a point
-			function scrollToPoint(point, direction) {
-				preScroll(direction);
+			function scrollToPoint(point) {
+				preScroll();
 				carousel.animate({ scrollLeft: point }, 100, function() {
+					var direction = getDirection();
 					postScroll(direction);
 				});
+			}
+
+			function getDirection() {
+				var direction = 'none';
+				if(carouselData.lastScroll.x < carousel.scrollLeft()) {
+					direction = 'next';
+					carouselData.position++;
+				} 
+				else if(carouselData.lastScroll.x > carousel.scrollLeft()) {
+					direction = 'prev';
+					carouselData.position--;
+				}
+				return direction;
 			}
 			
 			/**
@@ -346,12 +339,13 @@ angular.module('angularCarouselLite')
 			*
 			*/
 
-			function preScroll(direction) {
-				carouselData.lastPosition = carouselData.position - 1;
-				broadcastPreScroll(direction);
+			function preScroll() {
+				broadcastPreScroll();
 			}
 			
 			function postScroll(direction) {
+				// Set this scroll position to last for next event
+				carouselData.lastScroll.x = carousel.scrollLeft();
 				broadcastPostScroll(direction);
 			}
 
@@ -383,11 +377,8 @@ angular.module('angularCarouselLite')
 				});
 			} 
 
-			function broadcastPreScroll(direction) {
-				scope.$emit('carouselEventPreScroll', {
-					position: carouselData.lastPosition,
-					direction: direction 
-				});
+			function broadcastPreScroll() {
+				scope.$emit('carouselEventPreScroll', {});
 			} 
 
 			function broadcastPostScroll(direction) {
