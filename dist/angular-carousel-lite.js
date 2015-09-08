@@ -210,8 +210,7 @@ angular.module('angularCarouselLite')
 			function scrollNext() {
 				if(carouselData.numSlides > 0 &&
 					carouselData.position < carouselData.numSlides - 1) {
-					var newPosition = carouselData + 1;
-					console.log({newPosition: newPosition, current: carouselData.position});
+					var newPosition = carouselData.position + 1;
 					scrollTo(newPosition);
 				}
 			}
@@ -219,8 +218,7 @@ angular.module('angularCarouselLite')
 			// Scroll Prev
 			function scrollPrev() {
 				if(carouselData.position > 0 ) {
-					var newPosition = carouselData - 1;
-					console.log({newPosition: newPosition, current: carouselData.position});
+					var newPosition = carouselData.position - 1;
 					scrollTo(newPosition);
 				}
 			}
