@@ -31,6 +31,7 @@ angular.module('angularCarouselLite')
 			// Data
 			var carouselData = {
 						position: -1,
+						lastPosition: -1,
 						numSlides: 0,
 						lastScroll: {x: 0},
 					},
@@ -171,6 +172,7 @@ angular.module('angularCarouselLite')
 					'position': 'relative',
 					'top': '0',
 					'left': '0',
+					'opacity': '0.5',
 					'height': '100%',
 					'vertical-align': 'top',
 					'pointer-events': 'none',
@@ -261,18 +263,20 @@ angular.module('angularCarouselLite')
 				// Return nearest
 				return carousel.scrollLeft() + nearest;
 			}
-			
-			// Scroll to a point
-			function scrollToPoint(point) {
-				preScroll();
-				carousel.animate({ scrollLeft: point }, 100, function() {
-					var direction = getDirection();
-					postScroll(direction);
-				});
+
+			// Set focus
+			function setOpacityFocus(position) {
+				var lastElement = $('.carousel-image').eq(carousel.lastPosition);
+				element.css('opacity', '0.5');
+				var slide = $('.carousel-image').eq(position);
+				element.css('opacity', '1');
 			}
 
+			// Get direction
 			function getDirection() {
 				var direction = 'none';
+				// Set last position
+				carouselData.lastPosition = carouselData.position;
 				if(carouselData.lastScroll.x < carousel.scrollLeft()) {
 					direction = 'next';
 					carouselData.position++;
@@ -282,6 +286,15 @@ angular.module('angularCarouselLite')
 					carouselData.position--;
 				}
 				return direction;
+			}
+			
+			// Scroll to a point
+			function scrollToPoint(point) {
+				preScroll();
+				carousel.animate({ scrollLeft: point }, 100, function() {
+					var direction = getDirection();
+					postScroll(direction);
+				});
 			}
 			
 			/**
@@ -342,6 +355,7 @@ angular.module('angularCarouselLite')
 			*/
 
 			function preScroll() {
+				setOpacityFocus(carouselData.position);
 				broadcastPreScroll();
 			}
 			
