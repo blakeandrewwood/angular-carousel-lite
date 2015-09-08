@@ -23,6 +23,11 @@ angular.module('angularCarouselLite')
 		},
 		link: function postLink(scope, element, attrs) {
 			
+			/**
+			* Configuration 
+			*
+			*/
+
 			// Config
 			var carouselClass = attrs.carouselClass;
 			var slideClass = attrs.slideClass;
@@ -48,20 +53,18 @@ angular.module('angularCarouselLite')
 						start: {x: 0},
 					};
 			
-			// Speed test
-			var time = {
-				start: 0,
-				end: 0,
-			};
-			
 			/**
 			* Init 
+			*
 			*/
+
 			setup();
-			
+
 			/**
 			* Setup 
+			*
 			*/
+
 			function setup() {
 				carouselSetup();
 				trackSetup();
@@ -133,13 +136,16 @@ angular.module('angularCarouselLite')
 			}
 			
 			/**
-			* Methods 
+			* Slide 
+			*
 			*/
+
+			// Add slide
 			function add(url) {
-				
 				preloadImage(url, function() {
 					carouselData.numSlides++;
 					setupSlide(url);
+					broadcastImageLoaded(url);
 					// If first append, go to it
 					if(carouselData.numSlides == 1){
 						$timeout(function() {
@@ -195,58 +201,10 @@ angular.module('angularCarouselLite')
 			}
 			
 			/**
-			* Incomming Broadcast
-			*/
-			// Add image
-			scope.$on('carouselAdd', function(event, data) {
-				add(data.image);
-			});
-			
-			// Scroll next
-			scope.$on('carouselNext', function(event, data) {
-				scrollNext();
-			});
-			
-			// Scroll prev
-			scope.$on('carouselPrev', function(event, data) {
-				scrollPrev();
-			});
-			
-			/**
-			* Mouse Events 
-			*/
-			// Mouse Down 
-			track.mousedown(function(e) {
-				if(e.button === 0) {
-					mouse.button = 0;
-					mouse.grabbed.x = e.pageX;
-					mouse.start.x = carousel.scrollLeft();
-				} else {
-					mouse.button = null;
-				}
-			});
-			
-			// Mouse up
-			$(document).mouseup(function(e) {
-				mouse.button = null;
-			});
-			track.mouseup(function(e) {
-				findNearestSlide(center);
-			});
-			
-			// Mouse move
-			track.mousemove(function(e) {
-				if(mouse.button === 0) {
-					var newX = e.pageX;
-					mouse.scroll.x = carousel.scrollLeft();
-					mouse.distance = mouse.start.x - newX + mouse.grabbed.x;
-					scrollDrag(mouse.distance);
-				}
-			});
-			
-			/**
 			* Scrolling Events
+			*
 			*/
+
 			// Scroll Next
 			function scrollNext() {
 				if(carouselData.numSlides > 0 &&
@@ -277,7 +235,9 @@ angular.module('angularCarouselLite')
 			
 			/**
 			* Scrolling 
+			*
 			*/
+
 			// Find the nearest slide
 			function findNearestSlide(center) {
 				// Arrays
@@ -327,7 +287,9 @@ angular.module('angularCarouselLite')
 			
 			/**
 			* Scrolling Helpers 
+			*
 			*/
+
 			// Get smallest number
 			Array.absMin = function(array) {
 				return Math.min.apply(Math, array.map(Math.abs));
@@ -340,21 +302,101 @@ angular.module('angularCarouselLite')
 			}
 			
 			/**
-			* Events
+			* Mouse Events 
+			*
 			*/
-			// Pre scroll
+
+			// On Mouse Down 
+			track.mousedown(function(e) {
+				if(e.button === 0) {
+					mouse.button = 0;
+					mouse.grabbed.x = e.pageX;
+					mouse.start.x = carousel.scrollLeft();
+				} else {
+					mouse.button = null;
+				}
+			});
+			
+			// On Document Mouse up
+			$(document).mouseup(function(e) {
+				mouse.button = null;
+			});
+
+			// On Track Mouse up
+			track.mouseup(function(e) {
+				findNearestSlide(center);
+			});
+			
+			// On Mouse move
+			track.mousemove(function(e) {
+				if(mouse.button === 0) {
+					var newX = e.pageX;
+					mouse.scroll.x = carousel.scrollLeft();
+					mouse.distance = mouse.start.x - newX + mouse.grabbed.x;
+					scrollDrag(mouse.distance);
+				}
+			});
+			
+			/**
+			* Events
+			*
+			*/
+
 			function preScroll(direction) {
 				carouselData.lastPosition = carouselData.position - 1;
+				broadcastPreScroll();
 			}
 			
-			// Post scroll
 			function postScroll(direction) {
-				//
+				broadcastPostScroll();
 			}
+
+			/**
+			* Incomming Broadcast
+			*
+			*/
+
+			scope.$on('carouselAdd', function(event, data) {
+				add(data.image);
+			});
+			
+			scope.$on('carouselNext', function(event, data) {
+				scrollNext();
+			});
+			
+			scope.$on('carouselPrev', function(event, data) {
+				scrollPrev();
+			});
+
+			/**
+			* Outgoing Broadcasts 
+			*
+			*/
+
+			function broadcastImageLoaded(src) {
+				scope.$emit('carouselEventImageLoaded', {
+					src: src 
+				});
+			} 
+
+			function broadcastPreScroll() {
+				scope.$emit('carouselEventPreScroll', {
+					position: carouselData.lastPosition 
+				});
+			} 
+
+			function broadcastPostScroll() {
+				scope.$emit('carouselEventPostScroll', {
+					position: carouselData.position 
+				});
+			} 
 			
 			/**
 			* Arrangment 
+			*
 			*/
+
+			/*
 			// Arrange first to last 
 			function moveFirstBeforeLast() {
 				$('.carousel-image:first').before($('.carousel-image:last'));
@@ -364,23 +406,7 @@ angular.module('angularCarouselLite')
 			function moveLastAfterFirst() {
 				$('.carousel-image:last').after($('.carousel-image:first'));
 			}
-			
-			/**
-			* Speed test 
 			*/
-			function startTime() {
-				var newTime = new Date();
-				time.start = newTime.getMilliseconds();
-			}
-			
-			function endTime() {
-				var newTime = new Date();
-				time.end = newTime.getMilliseconds();
-			}
-			
-			function getTimeElapsed() {
-				return time.end - time.start;
-			}
 			
 		}
 	};
