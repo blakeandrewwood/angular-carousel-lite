@@ -223,7 +223,7 @@ angular.module('angularCarouselLite')
 			
 			// Scroll To
 			function scrollTo(position) {
-				var newScrollX = getSlideByPosition(carouselData.position);
+				var newScrollX = getSlideByPosition(position);
 				scrollToPoint(newScrollX);
 			}
 			
