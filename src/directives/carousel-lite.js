@@ -265,11 +265,11 @@ angular.module('angularCarouselLite')
 			}
 
 			// Set focus
-			function setOpacityFocus(position) {
-				var lastElement = $('.carousel-image').eq(carousel.lastPosition);
-				element.css('opacity', '0.5');
-				var slide = $('.carousel-image').eq(position);
-				element.css('opacity', '1');
+			function setOpacityFocus() {
+				var lastSlide = $('.carousel-image').eq(carouselData.lastPosition);
+				lastSlide.css('opacity', '0.5');
+				var slide = $('.carousel-image').eq(carouselData.position);
+				slide.css('opacity', '1');
 			}
 
 			// Get direction
@@ -355,7 +355,7 @@ angular.module('angularCarouselLite')
 			*/
 
 			function preScroll() {
-				setOpacityFocus(carouselData.position);
+				setOpacityFocus();
 				broadcastPreScroll();
 			}
 			
