@@ -251,10 +251,10 @@ angular.module('angularCarouselLite')
 
 				// Determine direction
 				if(minPos > minNeg && (center - nearest) < 0) {
-					direction = 'none';
+					direction = 'none1';
 				}
 				else if(minPos < minNeg && (center - nearest) > 0) {
-					direction = 'none';
+					direction = 'none2';
 				}
 				else if(minPos > minNeg) {
 					direction = 'prev';
@@ -345,11 +345,11 @@ angular.module('angularCarouselLite')
 
 			function preScroll(direction) {
 				carouselData.lastPosition = carouselData.position - 1;
-				broadcastPreScroll();
+				broadcastPreScroll(direction);
 			}
 			
 			function postScroll(direction) {
-				broadcastPostScroll();
+				broadcastPostScroll(direction);
 			}
 
 			/**
@@ -380,15 +380,17 @@ angular.module('angularCarouselLite')
 				});
 			} 
 
-			function broadcastPreScroll() {
+			function broadcastPreScroll(direction) {
 				scope.$emit('carouselEventPreScroll', {
-					position: carouselData.lastPosition 
+					position: carouselData.lastPosition,
+					direction: direction 
 				});
 			} 
 
-			function broadcastPostScroll() {
+			function broadcastPostScroll(direction) {
 				scope.$emit('carouselEventPostScroll', {
-					position: carouselData.position 
+					position: carouselData.position,
+					direction: direction 
 				});
 			} 
 			
