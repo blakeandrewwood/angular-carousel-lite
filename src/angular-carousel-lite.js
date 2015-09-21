@@ -325,7 +325,6 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 	function getDirection() {
 		var direction = 'none';
 		// Set last position
-		console.log(carouselData);
 		if(carouselData.lastPosition < carouselData.position) {
 			direction = 'next';
 		} 
