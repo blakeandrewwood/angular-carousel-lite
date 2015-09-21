@@ -1,6 +1,6 @@
 /**
  * Responsive carousel fit for asynchronous data
- * @version v0.0.2 - 2015-09-21
+ * @version v0.0.2 - 2015-09-22
  * @link https://github.com/blakeandrewwood/angular-carousel-lite#readme
  * @author Blake Wood
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -194,17 +194,6 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 			'pointer-events': 'none',
 			'box-sizing': 'border-box'
 		});
-		// Position
-		var position = slide.position();
-		var offset = slide.offset();
-		// Size
-		var width = slide.outerWidth();
-		var height = slide.outerHeight();
-		// Center
-		var centerX = width / 2;
-		var centerY = height / 2;
-		var centerDiv = slide.find('.image-center:first')
-			.css({top: centerY - 40, left: centerX - 40});
 	}
 	
 	/**
@@ -332,7 +321,6 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 	function getDirection() {
 		var direction = 'none';
 		// Set last position
-		console.log(carouselData);
 		if(carouselData.lastPosition < carouselData.position) {
 			direction = 'next';
 		} 
