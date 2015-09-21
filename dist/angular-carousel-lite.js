@@ -153,10 +153,10 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 			// If first append, go to it
 			if(carouselData.numSlides == 1){
 				$timeout(function() {
-						// Force direction to be set as 'next'
-						carouselData.lastScroll.x = -Number.MAX_NUMBER;
-						carouselData.position = 0;
-						scrollTo(carouselData.position);
+					// Force direction to be set as 'next'
+					carouselData.lastScroll.x = -Number.MAX_NUMBER;
+					carouselData.position = 0;
+					scrollTo(carouselData.position);
 				}, 800);
 			} 
 		});
@@ -176,7 +176,7 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 	function setupSlide(url) {
 		// Append the slide
 		var slideHtml = '';
-		slideHtml += '<div class="carousel-image {{ vm.slideClass }}">';
+		slideHtml += '<div class="carousel-image ' + vm.slideClass + '">';
 		if(url) slideHtml += '<img style="height: 100%;" draggable="false" src="' + url + '">';
 		slideHtml += 	'</div>';
 		track.append(slideHtml);
