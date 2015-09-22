@@ -1,6 +1,6 @@
 {
   "name": "angular-carousel-lite",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Responsive carousel fit for asynchronous data",
   "main": "angular-carousel-lite.js",
   "scripts": {

@@ -1,6 +1,6 @@
 /**
  * Responsive carousel fit for asynchronous data
- * @version v0.0.2 - 2015-09-22
+ * @version v0.0.4 - 2015-09-22
  * @link https://github.com/blakeandrewwood/angular-carousel-lite#readme
  * @author Blake Wood
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -239,15 +239,25 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 		// Arrays
 		var offsetsPos = [];
 		var offsetsNeg = [];
-		// Calculate all offsets
-		$('.carousel-image').each(function(index) {
-			var self = $(this);
-			var offsetCenter = getSlideOffsetCenter(self);
-			var data = {index: index, offsetCenter: offsetCenter};
-			if(offsetCenter > 0) {
-				offsetsPos.push(data);
-			} else {
-				offsetsNeg.push(data);
+		// Get closest 5 slides so we don't make unnecessary 
+		// calculation for every slide
+		var positions = [
+			carouselData.position - 2,
+			carouselData.position - 1,
+			carouselData.position - 0,
+			carouselData.position + 1,
+			carouselData.position + 2,
+		];
+		angular.forEach(positions, function(position, key) {
+			var element = $('.carousel-image').eq(position);
+			if(element.length) {
+				var offsetCenter = getSlideOffsetCenter(element);
+				var data = {index: position, offsetCenter: offsetCenter};
+				if(offsetCenter > 0) {
+					offsetsPos.push(data);
+				} else {
+					offsetsNeg.push(data);
+				}
 			}
 		});
 		var slide = determineNearestAbsOffset(offsetsPos, offsetsNeg);
