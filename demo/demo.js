@@ -9,13 +9,14 @@ MainController.$inject = ['$rootScope'];
 function MainController($rootScope) {
 
 	var vm = this;
+    vm.position = 1;
+	vm.numImages = 1;
 
-	var numImages = 1;
 	var interval = setInterval(function() {
-		var image = 'http://lorempixel.com/400/300/animals/' + numImages;
+		var image = 'http://lorempixel.com/400/300/animals/' + vm.numImages;
         $rootScope.$broadcast('carouselAddSingle', {image: image});
-        numImages++;
-        if(numImages > 6) {
+        vm.numImages++;
+        if(vm.numImages > 6) {
         	clearInterval(interval);
         }
 	}, 1000);
@@ -27,7 +28,8 @@ function MainController($rootScope) {
 
     // On carousel scroll
     $rootScope.$on('carouselEventPostScroll', function(event, data) {
-    	console.log(data);
+        vm.position = data.position;
+        console.log(data);
     });
 
 }
