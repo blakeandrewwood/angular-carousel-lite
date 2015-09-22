@@ -250,7 +250,8 @@ function CarouselLiteController($rootScope, $swipe, $timeout) {
 		];
 		angular.forEach(positions, function(position, key) {
 			var element = $('.carousel-image').eq(position);
-			if(element.length) {
+			if(position >= 0 && element.length) {
+				console.log(position);
 				var offsetCenter = getSlideOffsetCenter(element);
 				var data = {index: position, offsetCenter: offsetCenter};
 				if(offsetCenter > 0) {
